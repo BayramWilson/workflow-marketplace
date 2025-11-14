@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at`      DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`      DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_users_email` (`email`)
+  UNIQUE KEY `uq_users_email` (`email`),
+  UNIQUE KEY `uq_users_display_name` (`display_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Follows (User follows Seller)

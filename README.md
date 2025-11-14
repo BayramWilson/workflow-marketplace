@@ -32,6 +32,7 @@ Die zugehörigen Modelle sind dokumentiert in:
 - Build/Dev: Vite (React + TypeScript)
 - Styling: Tailwind CSS v4 (Zero‑Config, `@tailwindcss/vite`)
 - UI‑Komponenten: shadcn (Design: „new‑york“, Icons: lucide)
+- Backend‑API: Node + Express, `mysql2`, Argon2id (Passwörter), JWT in HttpOnly‑Cookies
 - Linting: ESLint
 
 
@@ -46,6 +47,7 @@ Die zugehörigen Modelle sind dokumentiert in:
 - `db/schema.sql` – MySQL/MariaDB‑Schema
 - `vite.config.ts`, `tsconfig*.json` – Build/TypeScript‑Konfig
 - `components.json` – shadcn‑Konfiguration
+- `server/index.js` – Express‑API (Auth, Profil) für MariaDB
 
 
 ## Setup & Entwicklung
@@ -59,8 +61,14 @@ Installation und Start:
 # Abhängigkeiten installieren
 npm install
 
-# Entwicklung starten (http://localhost:5173)
+# Backend‑API starten (http://localhost:3000)
+npm run server
+
+# Frontend entwickeln (http://localhost:5173)
 npm run dev
+
+# Beides parallel im Dev (Client + Server)
+npm run dev:all
 
 # Linting
 npm run lint
@@ -77,6 +85,14 @@ Empfohlene Umgebungsvariablen (Vite liest `import.meta.env.VITE_*`):
 # .env.local (Beispiel)
 VITE_API_BASE_URL=http://localhost:3000
 VITE_STRIPE_PUBLIC_KEY=pk_test_...
+
+# Backend‑Server (Express)
+DB_HOST=127.0.0.1
+DB_USER=root
+DB_PW=your_strong_password
+DB_NAME=my_app_db
+JWT_SECRET=change_me_in_prod
+ORIGIN=http://localhost:5173
 ```
 
 
@@ -94,6 +110,33 @@ Komponenten landen standardmäßig in `src/components/ui` (gemäß Aliases in `c
 Optional in Cursor via MCP‑Server (falls konfiguriert):
 - Komponenten suchen/hinzufügen direkt über den „shadcn MCP“ Workflow in der IDE.
 - Vorteil: Demos/Varianten ansehen und mit einem Klick importieren.
+
+
+## Backend‑API (Auth & Profil)
+- Technologie: Express, `mysql2/promise`, Argon2id (Hashing), JWT in HttpOnly‑Cookie (`SameSite=Lax`).
+- Verbindung: liest `DB_HOST`, `DB_USER`, `DB_PW`, `DB_NAME` aus `.env`; Standard‑DB ist `my_app_db`.
+- Sicherheit:
+  - Passwörter werden mit Argon2id gehasht (niemals im Klartext gespeichert).
+  - Session als signierter JWT im HttpOnly‑Cookie (nicht im `localStorage`).
+  - In Produktion `secure=true` und HTTPS verwenden.
+
+### Endpunkte
+- `POST /api/auth/register` – { email, displayName, password } → erstellt User (`users.password_hash`) und setzt Cookie.
+- `POST /api/auth/login` – { email, password } → validiert Hash und setzt Cookie.
+- `POST /api/auth/logout` – löscht Cookie.
+- `GET /api/me` – liefert aktuellen User basierend auf Cookie.
+- `PUT /api/profile` – { displayName?, avatarUrl?, bio? } → aktualisiert Profilfelder.
+
+Beispiel (cURL):
+```bash
+curl -i -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"demo@example.com","displayName":"Demo","password":"secret"}'
+```
+
+Frontend‑Integration:
+- `src/lib/auth.tsx` ruft die API mit `credentials: "include"` auf und nutzt `VITE_API_BASE_URL`.
+- Aufrufreihenfolge: Register/Login → Cookie wird gesetzt → `GET /api/me` stellt Session her.
 
 
 ## Datenbank einrichten (MySQL/MariaDB)
