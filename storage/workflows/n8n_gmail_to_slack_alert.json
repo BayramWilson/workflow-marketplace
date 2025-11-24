@@ -1,0 +1,82 @@
+{
+  "name": "n8n: Gmail → Slack Alert (Sample)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "Manual Trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [{ json: { message: 'Sample: Gmail to Slack alert' } }];"
+      },
+      "id": "Function",
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [520, 300]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "staticData": null,
+  "pinData": {}
+}
+
+{
+  "name": "Gmail → Slack Alert (Demo)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "gmailTrigger1",
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "text": "New email received"
+      },
+      "id": "slack1",
+      "name": "Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [540, 300]
+    }
+  ],
+  "connections": {
+    "gmailTrigger1": {
+      "main": [
+        [
+          {
+            "node": "slack1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "meta": {
+    "exportedAt": "2025-11-24T00:00:00Z"
+  }
+}
+
+

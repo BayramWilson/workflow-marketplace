@@ -1,0 +1,66 @@
+{
+  "name": "Make: Trello → Slack Digest (Sample)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "Manual Trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [{ json: { message: 'Sample: Trello to Slack digest' } }];"
+      },
+      "id": "Function",
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [520, 300]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "staticData": null,
+  "pinData": {}
+}
+
+{
+  "name": "Trello → Slack Digest (Demo)",
+  "scenario": {
+    "modules": [
+      {
+        "id": 1,
+        "name": "Watch Trello Board",
+        "module": "trello.watchBoard"
+      },
+      {
+        "id": 2,
+        "name": "Send Slack Message",
+        "module": "slack.sendMessage"
+      }
+    ],
+    "links": [
+      { "from_module": 1, "to_module": 2 }
+    ]
+  },
+  "metadata": {
+    "note": "Demo placeholder for Make (Integromat). Configure modules after import."
+  }
+}
+
+

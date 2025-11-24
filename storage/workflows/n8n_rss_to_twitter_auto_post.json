@@ -1,0 +1,84 @@
+{
+  "name": "n8n: RSS → Twitter Auto-Post (Sample)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "Manual Trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [{ json: { message: 'Sample: RSS to Twitter auto-post' } }];"
+      },
+      "id": "Function",
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [520, 300]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "staticData": null,
+  "pinData": {}
+}
+
+{
+  "name": "RSS → Twitter Auto-Post (Demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://example.com/rss.xml"
+      },
+      "id": "rss1",
+      "name": "RSS Feed Read",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "text": "New post: {{$json[\"title\"]}} {{$json[\"link\"]}}"
+      },
+      "id": "twitter1",
+      "name": "Twitter/X Post",
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 1,
+      "position": [540, 300]
+    }
+  ],
+  "connections": {
+    "rss1": {
+      "main": [
+        [
+          {
+            "node": "twitter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "meta": {
+    "exportedAt": "2025-11-24T00:00:00Z"
+  }
+}
+
+

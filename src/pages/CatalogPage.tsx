@@ -1,12 +1,13 @@
 import * as React from "react"
-import { Link, useSearchParams } from "react-router-dom"
-import { fetchCategories, fetchTags, fetchWorkflows, type WorkflowListItem } from "@/lib/api"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
+import { fetchCategories, fetchTags, fetchWorkflows, purchaseWorkflow, type WorkflowListItem } from "@/lib/api"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 export default function CatalogPage() {
+  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [q, setQ] = React.useState(searchParams.get("q") ?? "")
   const [category, setCategory] = React.useState(searchParams.get("category") ?? "")
@@ -59,6 +60,15 @@ export default function CatalogPage() {
 
   function toggleTag(slug: string) {
     setTags((prev) => (prev.includes(slug) ? prev.filter((t) => t !== slug) : [...prev, slug]))
+  }
+
+  async function onBuy(workflowId: number) {
+    try {
+      await purchaseWorkflow(workflowId)
+      navigate("/library")
+    } catch (e: any) {
+      alert(e?.message || "Kauf fehlgeschlagen")
+    }
   }
 
   return (
@@ -122,6 +132,9 @@ export default function CatalogPage() {
                     by <span className="font-medium">{wf.seller.displayName}</span>
                     {wf.category ? <> • {wf.category.name}</> : null}
                   </div>
+                  {typeof wf.purchaseCount === "number" ? (
+                    <div className="mb-2 text-xs text-muted-foreground">Käufe: <span className="font-medium text-foreground">{wf.purchaseCount}</span></div>
+                  ) : null}
                   <div className="flex flex-wrap gap-1">
                     {wf.tags.map((t) => (
                       <Badge key={t} variant="outline">
@@ -130,6 +143,9 @@ export default function CatalogPage() {
                     ))}
                   </div>
                 </CardContent>
+                <div className="px-6 pb-6">
+                  <Button size="sm" onClick={() => onBuy(wf.id)}>Kaufen</Button>
+                </div>
               </Card>
             ))}
           </div>

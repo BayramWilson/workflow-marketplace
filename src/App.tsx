@@ -15,6 +15,7 @@ import { AuthProvider, useAuth } from "@/lib/auth"
 import { BrowserRouter, Link, Navigate, Route, Routes, useNavigate } from "react-router-dom"
 import CatalogPage from "@/pages/CatalogPage"
 import WorkflowDetailPage from "@/pages/WorkflowDetailPage"
+import LibraryPage from "@/pages/LibraryPage"
 
 function App() {
   return (
@@ -29,6 +30,14 @@ function App() {
               <Route path="/workflows/:id" element={<WorkflowDetailPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route
+                path="/library"
+                element={
+                  <Protected>
+                    <LibraryPage />
+                  </Protected>
+                }
+              />
               <Route
                 path="/profile"
                 element={
@@ -92,6 +101,9 @@ function SiteHeader() {
             </>
           ) : (
             <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/library">Bibliothek</Link>
+              </Button>
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/profile">{user.displayName || user.email}</Link>
               </Button>

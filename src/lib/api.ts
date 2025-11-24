@@ -14,6 +14,7 @@ export type WorkflowListItem = {
   status: string
   createdAt: string
   updatedAt: string
+  purchaseCount?: number
   seller: { id: number; displayName: string; avatarUrl?: string | null }
   category: { id: number; name: string; slug: string } | null
   tags: string[]
@@ -52,6 +53,48 @@ export async function fetchTags(): Promise<Array<{ id: number; name: string; slu
   const res = await fetch(`${API_BASE}/api/tags`, { credentials: "include" })
   if (!res.ok) throw new Error(`Failed to fetch tags: ${res.status}`)
   return res.json()
+}
+
+export async function purchaseWorkflow(workflowId: number): Promise<{ purchaseId: number }> {
+  const res = await fetch(`${API_BASE}/api/purchase/${workflowId}`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+  })
+  if (!res.ok) throw new Error(`Purchase failed: ${res.status}`)
+  return res.json()
+}
+
+export type LibraryItem = {
+  purchaseId: number
+  workflow: {
+    id: number
+    title: string
+    price: number
+    currency: string
+  }
+  purchasedAt: string
+  downloadCount: number
+  lastAccessedAt?: string | null
+}
+
+export async function fetchLibrary(): Promise<LibraryItem[]> {
+  const res = await fetch(`${API_BASE}/api/library`, { credentials: "include" })
+  if (!res.ok) throw new Error(`Failed to fetch library: ${res.status}`)
+  return res.json()
+}
+
+export async function downloadPurchaseBlob(purchaseId: number): Promise<{ blob: Blob; filename: string }> {
+  const res = await fetch(`${API_BASE}/api/library/${purchaseId}/download`, {
+    method: "GET",
+    credentials: "include",
+  })
+  if (!res.ok) throw new Error(`Download failed: ${res.status}`)
+  const disp = res.headers.get("content-disposition") || ""
+  const match = /filename="([^"]+)"/i.exec(disp)
+  const filename = match?.[1] || `workflow-${purchaseId}.json`
+  const blob = await res.blob()
+  return { blob, filename }
 }
 
 

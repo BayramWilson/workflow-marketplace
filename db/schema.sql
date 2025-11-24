@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `workflows` (
   `delivery_type`          VARCHAR(64)      NULL, -- replace with ENUM if you have final values
   `file_storage_path`      VARCHAR(2048)    NULL,
   `file_size_bytes`        BIGINT UNSIGNED  NULL,
+  `purchase_count`         INT              NOT NULL DEFAULT 0,
 
   `remote_host_url`        VARCHAR(2048)    NULL,
   `is_hosted_by_platform`  BOOLEAN          NOT NULL DEFAULT 0,

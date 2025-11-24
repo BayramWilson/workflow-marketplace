@@ -1,0 +1,64 @@
+{
+  "name": "Zapier: Google Sheets → Email Report (Sample)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "Manual Trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [{ json: { message: 'Sample: Sheets to Email report' } }];"
+      },
+      "id": "Function",
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [520, 300]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "staticData": null,
+  "pinData": {}
+}
+
+{
+  "version": "1.0.0",
+  "title": "Google Sheets → Email Report (Demo)",
+  "steps": [
+    {
+      "type": "trigger",
+      "app": "google_sheets",
+      "event": "new_spreadsheet_row",
+      "name": "New Row"
+    },
+    {
+      "type": "action",
+      "app": "email",
+      "event": "send_outbound_email",
+      "name": "Send Email"
+    }
+  ],
+  "metadata": {
+    "note": "Demo placeholder for Zapier. Configure connections after import."
+  }
+}
+
+

@@ -1,0 +1,64 @@
+{
+  "name": "Zapier: Stripe → Notion Deal (Sample)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "Manual Trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [{ json: { message: 'Sample: Stripe to Notion deal' } }];"
+      },
+      "id": "Function",
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [520, 300]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "staticData": null,
+  "pinData": {}
+}
+
+{
+  "version": "1.0.0",
+  "title": "Stripe → Notion Deal (Demo)",
+  "steps": [
+    {
+      "type": "trigger",
+      "app": "stripe",
+      "event": "payment_intent.succeeded",
+      "name": "Stripe Payment Succeeded"
+    },
+    {
+      "type": "action",
+      "app": "notion",
+      "event": "create_page",
+      "name": "Create Deal Page"
+    }
+  ],
+  "metadata": {
+    "note": "Demo placeholder for Zapier. Configure connections after import."
+  }
+}
+
+

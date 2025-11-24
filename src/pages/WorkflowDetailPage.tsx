@@ -1,11 +1,13 @@
 import * as React from "react"
-import { useParams } from "react-router-dom"
-import { fetchWorkflow, type WorkflowListItem } from "@/lib/api"
+import { useNavigate, useParams } from "react-router-dom"
+import { fetchWorkflow, purchaseWorkflow, type WorkflowListItem } from "@/lib/api"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 
 export default function WorkflowDetailPage() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [loading, setLoading] = React.useState(true)
   const [wf, setWf] = React.useState<WorkflowListItem | null>(null)
   const [error, setError] = React.useState<string | null>(null)
@@ -47,6 +49,9 @@ export default function WorkflowDetailPage() {
             {wf.category ? <> • {wf.category.name}</> : null}
             {wf.platformType ? <> • {wf.platformType}</> : null}
           </div>
+          {typeof wf.purchaseCount === "number" ? (
+            <div className="text-xs text-muted-foreground">Käufe: <span className="font-medium text-foreground">{wf.purchaseCount}</span></div>
+          ) : null}
           <div className="prose max-w-none whitespace-pre-wrap text-sm">
             {wf.description || wf.shortDescription || "Keine Beschreibung"}
           </div>
@@ -56,6 +61,20 @@ export default function WorkflowDetailPage() {
                 {t}
               </Badge>
             ))}
+          </div>
+          <div>
+            <Button
+              onClick={async () => {
+                try {
+                  await purchaseWorkflow(wf.id)
+                  navigate("/library")
+                } catch (e: any) {
+                  alert(e?.message || "Kauf fehlgeschlagen")
+                }
+              }}
+            >
+              Kaufen
+            </Button>
           </div>
         </CardContent>
       </Card>

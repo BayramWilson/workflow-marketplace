@@ -95,6 +95,7 @@ export function createCatalogRouter({ pool }) {
           w.status,
           w.created_at AS createdAt,
           w.updated_at AS updatedAt,
+          w.purchase_count AS purchaseCount,
           s.display_name AS sellerDisplayName,
           s.avatar_url AS sellerAvatarUrl,
           c.name AS categoryName,
@@ -138,6 +139,7 @@ export function createCatalogRouter({ pool }) {
         status: r.status,
         createdAt: r.createdAt,
         updatedAt: r.updatedAt,
+        purchaseCount: r.purchaseCount ?? 0,
         seller: {
           id: r.sellerId,
           displayName: r.sellerDisplayName,
@@ -186,6 +188,7 @@ export function createCatalogRouter({ pool }) {
           w.status,
           w.created_at AS createdAt,
           w.updated_at AS updatedAt,
+          w.purchase_count AS purchaseCount,
           s.display_name AS sellerDisplayName,
           s.avatar_url AS sellerAvatarUrl,
           c.name AS categoryName,
@@ -229,6 +232,7 @@ export function createCatalogRouter({ pool }) {
         status: wf.status,
         createdAt: wf.createdAt,
         updatedAt: wf.updatedAt,
+        purchaseCount: wf.purchaseCount ?? 0,
         seller: {
           id: wf.sellerId,
           displayName: wf.sellerDisplayName,

@@ -70,4 +70,25 @@ FROM workflows w
 JOIN workflow_tags t ON t.slug IN ('zapier', 'gmail')
 WHERE w.title = 'Zapier: Google Sheets → Email Report';
 
+-- Attach simple downloadable JSON files to each workflow
+UPDATE workflows
+SET file_storage_path = 'storage/workflows/n8n_gmail_to_slack_alert.json'
+WHERE title = 'n8n: Gmail → Slack Alert';
+
+UPDATE workflows
+SET file_storage_path = 'storage/workflows/zapier_stripe_to_notion_deal.json'
+WHERE title = 'Zapier: Stripe → Notion Deal';
+
+UPDATE workflows
+SET file_storage_path = 'storage/workflows/make_trello_to_slack_digest.json'
+WHERE title = 'Make: Trello → Slack Digest';
+
+UPDATE workflows
+SET file_storage_path = 'storage/workflows/n8n_rss_to_twitter_auto_post.json'
+WHERE title = 'n8n: RSS → Twitter Auto-Post';
+
+UPDATE workflows
+SET file_storage_path = 'storage/workflows/zapier_google_sheets_to_email_report.json'
+WHERE title = 'Zapier: Google Sheets → Email Report';
+
 
