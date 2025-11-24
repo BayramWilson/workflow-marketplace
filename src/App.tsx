@@ -13,6 +13,8 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { AuthProvider, useAuth } from "@/lib/auth"
 import { BrowserRouter, Link, Navigate, Route, Routes, useNavigate } from "react-router-dom"
+import CatalogPage from "@/pages/CatalogPage"
+import WorkflowDetailPage from "@/pages/WorkflowDetailPage"
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <main className="container mx-auto px-4">
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/catalog" element={<CatalogPage />} />
+              <Route path="/workflows/:id" element={<WorkflowDetailPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route
@@ -61,7 +65,7 @@ function SiteHeader() {
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuLink className="px-3 py-2 text-sm" asChild>
-                  <Link to="/">Katalog</Link>
+                  <Link to="/catalog">Katalog</Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
@@ -123,12 +127,12 @@ function HeroSection() {
           optional mit Support und Updates.
         </p>
         <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button size="lg">Katalog ansehen</Button>
+          <Button size="lg" asChild><Link to="/catalog">Katalog ansehen</Link></Button>
           <Button size="lg" variant="outline">Workflows verkaufen</Button>
         </div>
         <div className="mt-8 flex items-center gap-2">
           <Input className="w-full sm:w-96" placeholder="Suche nach Kategorien, Tags oder Plattformen..." />
-          <Button variant="secondary">Suchen</Button>
+          <Button variant="secondary" asChild><Link to="/catalog">Suchen</Link></Button>
         </div>
       </div>
     </section>

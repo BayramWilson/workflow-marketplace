@@ -47,7 +47,7 @@ Die zugehörigen Modelle sind dokumentiert in:
 - `db/schema.sql` – MySQL/MariaDB‑Schema
 - `vite.config.ts`, `tsconfig*.json` – Build/TypeScript‑Konfig
 - `components.json` – shadcn‑Konfiguration
-- `server/index.js` – Express‑API (Auth, Profil) für MariaDB
+- `server/index.ts` – Express‑API (Auth, Profil) für MariaDB
 
 
 ## Setup & Entwicklung
