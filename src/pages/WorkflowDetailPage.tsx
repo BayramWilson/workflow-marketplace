@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { fetchWorkflow, purchaseWorkflow, type WorkflowListItem } from "@/lib/api"
+import { fetchWorkflow, createCheckoutSessionForWorkflow, type WorkflowListItem } from "@/lib/api"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -66,8 +66,12 @@ export default function WorkflowDetailPage() {
             <Button
               onClick={async () => {
                 try {
-                  await purchaseWorkflow(wf.id)
-                  navigate("/library")
+                  const { url } = await createCheckoutSessionForWorkflow(wf.id)
+                  if (url) {
+                    window.location.href = url
+                  } else {
+                    throw new Error("Stripe Session URL missing")
+                  }
                 } catch (e: any) {
                   alert(e?.message || "Kauf fehlgeschlagen")
                 }

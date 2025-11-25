@@ -93,6 +93,29 @@ DB_PW=your_strong_password
 DB_NAME=my_app_db
 JWT_SECRET=change_me_in_prod
 ORIGIN=http://localhost:5173
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
+
+Beispiel `.env.local` (komplett):
+```bash
+# Frontend (Vite liest nur Variablen mit Präfix VITE_)
+VITE_API_BASE_URL=http://localhost:3000
+VITE_STRIPE_PUBLIC_KEY=pk_test_yourPublicKey
+
+# Backend (Express)
+DB_HOST=127.0.0.1
+DB_USER=root
+DB_PW=your_strong_password
+DB_NAME=my_app_db
+JWT_SECRET=development_only_change_me
+ORIGIN=http://localhost:5173
+
+# Stripe (Server)
+# Hol dir STRIPE_WEBHOOK_SECRET via:
+#   stripe listen --forward-to http://localhost:3000/api/stripe/webhook
+STRIPE_SECRET_KEY=sk_test_yourSecretKey
+STRIPE_WEBHOOK_SECRET=whsec_yourWebhookSigningSecret
 ```
 
 
@@ -115,11 +138,12 @@ Optional in Cursor via MCP‑Server (falls konfiguriert):
 ## Backend‑API (Auth & Profil)
 - Technologie: Express, `mysql2/promise`, Argon2id (Hashing), JWT in HttpOnly‑Cookie (`SameSite=Lax`).
 - Verbindung: liest `DB_HOST`, `DB_USER`, `DB_PW`, `DB_NAME` aus `.env`; Standard‑DB ist `my_app_db`.
-- Sicherheit:
+ - Sicherheit:
   - Passwörter werden mit Argon2id gehasht (niemals im Klartext gespeichert).
   - Session als signierter JWT im HttpOnly‑Cookie (nicht im `localStorage`).
+  - Stripe‑Webhook: Raw‑Body Parser vor `express.json()`, Signatur via `STRIPE_WEBHOOK_SECRET`.
   - In Produktion `secure=true` und HTTPS verwenden.
-
+ 
 ### Endpunkte
 - `POST /api/auth/register` – { email, displayName, password } → erstellt User (`users.password_hash`) und setzt Cookie.
 - `POST /api/auth/login` – { email, password } → validiert Hash und setzt Cookie.
@@ -191,6 +215,12 @@ Hinweise:
 
 ## API‑Verträge (Beispiele)
 Die UML‑Datei enthält passende TypeScript‑Interfaces. Beispielhafte REST‑Antworten:
+
+- POST `/api/checkout/session`
+```json
+{ "url": "https://checkout.stripe.com/c/session_...", "sessionId": "cs_test_..." }
+```
+Hinweis: Der Browser wird per `window.location.href = url` zum Stripe‑Checkout weitergeleitet.
 
 - GET `/api/workflows?status=published&category=marketing`
 ```json
