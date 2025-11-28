@@ -16,6 +16,8 @@ import { BrowserRouter, Link, Navigate, Route, Routes, useNavigate } from "react
 import CatalogPage from "@/pages/CatalogPage"
 import WorkflowDetailPage from "@/pages/WorkflowDetailPage"
 import LibraryPage from "@/pages/LibraryPage"
+import SellerDashboardPage from "@/pages/SellerDashboardPage"
+import WorkflowEditorPage from "@/pages/WorkflowEditorPage"
 
 function App() {
   return (
@@ -35,6 +37,22 @@ function App() {
                 element={
                   <Protected>
                     <LibraryPage />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/seller"
+                element={
+                  <Protected>
+                    <SellerDashboardPage />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/seller/workflows/:id/edit"
+                element={
+                  <Protected>
+                    <WorkflowEditorPage />
                   </Protected>
                 }
               />
@@ -81,7 +99,9 @@ function SiteHeader() {
                 <NavigationMenuLink className="px-3 py-2 text-sm">Kategorien</NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuLink className="px-3 py-2 text-sm">Verkaufen</NavigationMenuLink>
+                <NavigationMenuLink className="px-3 py-2 text-sm" asChild>
+                  <Link to="/seller">Verkaufen</Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink className="px-3 py-2 text-sm">Support</NavigationMenuLink>

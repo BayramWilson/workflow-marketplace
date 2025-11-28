@@ -176,16 +176,21 @@ Hinweise:
 4) Bibliothek & Download
 - Gekaufte Workflows listen, Download/Access zählen (`download_count`, `last_accessed_at`).
 
-5) Community
+5) Einstellen von Workflows (Verkauf)
+- Workflows anlegen/bearbeiten: Titel, Beschreibung, Preis, Kategorie, Tags, Status (Entwurf/Veröffentlicht).
+- Artefakt hochladen (Datei/Bundle) bzw. Delivery‑Typ wählen; Vorschau/Validierung vor dem Publizieren.
+- Verkäufer‑Dashboard: Entwürfe verwalten, Publizieren/Depublizieren, Preisänderungen, Download‑Zähler.
+
+6) Community
 - Follows (`user_follows`), Bewertungen (`workflow_reviews`), Kommentare/Threads (`workflow_comments`).
 
-6) Moderation & Admin
+7) Moderation & Admin
 - Einreichungen prüfen (`status`, `approved_by/at`), Gründe dokumentieren (`workflow_moderation_logs`).
 
-7) Support
+8) Support
 - Tickets (`support_tickets`) & Nachrichtenverläufe (`support_messages`).
 
-8) Optional: Hosting & Credentials
+9) Optional: Hosting & Credentials
 - Remote‑Hosting, Credential‑Anforderungen (`workflow_credential_requirements`) und Speicherung pro User (`user_workflow_credentials`).
 
 

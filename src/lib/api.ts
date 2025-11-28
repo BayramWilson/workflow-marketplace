@@ -97,4 +97,93 @@ export async function downloadPurchaseBlob(purchaseId: number): Promise<{ blob: 
   return { blob, filename }
 }
 
+// Seller APIs
+export type SellerWorkflow = WorkflowListItem
+
+export async function listMyWorkflows(params: { status?: string } = {}): Promise<{ items: SellerWorkflow[] }> {
+  const search = new URLSearchParams()
+  if (params.status) search.set("status", params.status)
+  const res = await fetch(`${API_BASE}/api/seller/workflows?${search.toString()}`, { credentials: "include" })
+  if (!res.ok) throw new Error(`Failed to load seller workflows: ${res.status}`)
+  return res.json()
+}
+
+export async function createWorkflowDraft(payload: {
+  title: string
+  shortDescription?: string | null
+  description?: string | null
+  platformType?: string | null
+  deliveryType?: string | null
+  price: number
+  currency?: string
+  categoryId?: number | null
+  tags?: string[]
+}): Promise<{ id: number }> {
+  const res = await fetch(`${API_BASE}/api/seller/workflows`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) throw new Error(`Failed to create draft: ${res.status}`)
+  return res.json()
+}
+
+export async function updateWorkflow(id: number, updates: Partial<{
+  title: string
+  shortDescription: string | null
+  description: string | null
+  platformType: string | null
+  deliveryType: string | null
+  price: number
+  currency: string
+  categoryId: number | null
+  tags: string[]
+}>): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/seller/workflows/${id}`, {
+    method: "PUT",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updates),
+  })
+  if (!res.ok) throw new Error(`Update failed: ${res.status}`)
+}
+
+export async function uploadWorkflowArtifact(id: number, file: File): Promise<{ path: string; size: number }> {
+  const form = new FormData()
+  form.set("file", file)
+  const res = await fetch(`${API_BASE}/api/seller/workflows/${id}/artifact`, {
+    method: "POST",
+    credentials: "include",
+    body: form,
+  })
+  if (!res.ok) throw new Error(`Upload failed: ${res.status}`)
+  return res.json()
+}
+
+export async function validateWorkflow(id: number): Promise<{ ok: boolean; issues: string[] }> {
+  const res = await fetch(`${API_BASE}/api/seller/workflows/${id}/validate`, {
+    method: "POST",
+    credentials: "include",
+  })
+  if (!res.ok) throw new Error(`Validation failed: ${res.status}`)
+  return res.json()
+}
+
+export async function publishWorkflow(id: number): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/seller/workflows/${id}/publish`, {
+    method: "POST",
+    credentials: "include",
+  })
+  if (!res.ok) throw new Error(`Publish failed: ${res.status}`)
+}
+
+export async function unpublishWorkflow(id: number): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/seller/workflows/${id}/unpublish`, {
+    method: "POST",
+    credentials: "include",
+  })
+  if (!res.ok) throw new Error(`Unpublish failed: ${res.status}`)
+}
+
 
