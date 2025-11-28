@@ -65,20 +65,6 @@ export async function purchaseWorkflow(workflowId: number): Promise<{ purchaseId
   return res.json()
 }
 
-export async function createCheckoutSessionForWorkflow(workflowId: number): Promise<{ url: string; sessionId: string }> {
-  const res = await fetch(`${API_BASE}/api/checkout/session`, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ workflowId }),
-  })
-  if (!res.ok) {
-    const text = await res.text().catch(() => "")
-    throw new Error(text || `Failed to create checkout session: ${res.status}`)
-  }
-  return res.json()
-}
-
 export type LibraryItem = {
   purchaseId: number
   workflow: {
